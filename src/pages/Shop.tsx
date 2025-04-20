@@ -3,8 +3,12 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Shop = () => {
+  const { isLoggedIn } = useAuth();
+
   // Sample product data
   const products = [
     {
@@ -56,17 +60,30 @@ const Shop = () => {
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden mb-12">
-          <div className="p-8 text-center">
-            <h2 className="text-2xl font-semibold mb-4">Sign in to access the full shop features</h2>
-            <p className="text-gray-600 mb-6">
-              Get access to personalized recommendations, price tracking, and convenient checkout.
-            </p>
-            <Button className="bg-nutribite-green hover:bg-nutribite-green-dark px-6 py-2">
-              Sign in to Continue
-            </Button>
+        {!isLoggedIn ? (
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden mb-12">
+            <div className="p-8 text-center">
+              <h2 className="text-2xl font-semibold mb-4">Sign in to access the full shop features</h2>
+              <p className="text-gray-600 mb-6">
+                Get access to personalized recommendations, price tracking, and convenient checkout.
+              </p>
+              <Link to="/auth">
+                <Button className="bg-nutribite-green hover:bg-nutribite-green-dark px-6 py-2">
+                  Sign in to Continue
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden mb-12">
+            <div className="p-8 text-center">
+              <h2 className="text-2xl font-semibold mb-4">Welcome to Your Personalized Shop</h2>
+              <p className="text-gray-600 mb-6">
+                Enjoy personalized recommendations based on your dietary preferences and past purchases.
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((product) => (

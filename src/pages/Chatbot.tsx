@@ -4,9 +4,12 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Chatbot = () => {
-  const [isAuthenticated] = useState(false);
+  const { isLoggedIn } = useAuth();
+  const [message, setMessage] = useState("");
 
   // Sample quick questions about nutrition
   const quickQuestions = [
@@ -15,6 +18,14 @@ const Chatbot = () => {
     "Are eggs good for health?",
     "Best sources of vitamin D?",
   ];
+
+  const handleSendMessage = () => {
+    if (message.trim()) {
+      // Here you would normally handle the chat interaction
+      // For now we'll just clear the input
+      setMessage("");
+    }
+  };
 
   return (
     <PageLayout>
@@ -27,9 +38,8 @@ const Chatbot = () => {
           </p>
         </div>
 
-        {isAuthenticated ? (
+        {isLoggedIn ? (
           <div className="max-w-3xl mx-auto">
-            {/* Actual chatbot interface would go here */}
             <Card className="shadow-lg">
               <CardHeader>
                 <CardTitle>Chat with Nutrition Assistant</CardTitle>
@@ -42,8 +52,20 @@ const Chatbot = () => {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <Input placeholder="Type your question here..." />
-                  <Button className="bg-nutribite-green hover:bg-nutribite-green-dark">Send</Button>
+                  <Input 
+                    placeholder="Type your question here..." 
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleSendMessage();
+                    }}
+                  />
+                  <Button 
+                    className="bg-nutribite-green hover:bg-nutribite-green-dark"
+                    onClick={handleSendMessage}
+                  >
+                    Send
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -70,9 +92,11 @@ const Chatbot = () => {
                   </div>
                 </div>
                 <div className="text-center">
-                  <Button className="bg-nutribite-green hover:bg-nutribite-green-dark px-6">
-                    Sign in to Access
-                  </Button>
+                  <Link to="/auth">
+                    <Button className="bg-nutribite-green hover:bg-nutribite-green-dark px-6">
+                      Sign in to Access
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>

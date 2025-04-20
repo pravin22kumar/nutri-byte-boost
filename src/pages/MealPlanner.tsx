@@ -6,17 +6,10 @@ import { Button } from "@/components/ui/button";
 import { UserDashboard } from "@/components/dashboard/UserDashboard";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 
 const MealPlanner = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    // Check if user is logged in by looking for user data in localStorage
-    const user = localStorage.getItem("nutribite_user");
-    if (user) {
-      setIsLoggedIn(true);
-    }
-  }, []);
+  const { isLoggedIn } = useAuth();
 
   return (
     <PageLayout>

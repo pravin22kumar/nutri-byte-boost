@@ -2,8 +2,12 @@
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Education = () => {
+  const { isLoggedIn } = useAuth();
+
   return (
     <PageLayout>
       <div className="container mx-auto px-4 md:px-6 py-16">
@@ -15,17 +19,30 @@ const Education = () => {
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden mb-16">
-          <div className="p-8 text-center">
-            <h2 className="text-2xl font-semibold mb-4">Sign in to access full educational content</h2>
-            <p className="text-gray-600 mb-6">
-              Get access to comprehensive articles, interactive infographics, and personalized nutrition guides.
-            </p>
-            <Button className="bg-nutribite-green hover:bg-nutribite-green-dark px-6 py-2">
-              Sign in to Continue
-            </Button>
+        {!isLoggedIn ? (
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden mb-16">
+            <div className="p-8 text-center">
+              <h2 className="text-2xl font-semibold mb-4">Sign in to access full educational content</h2>
+              <p className="text-gray-600 mb-6">
+                Get access to comprehensive articles, interactive infographics, and personalized nutrition guides.
+              </p>
+              <Link to="/auth">
+                <Button className="bg-nutribite-green hover:bg-nutribite-green-dark px-6 py-2">
+                  Sign in to Continue
+                </Button>
+              </Link>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden mb-16">
+            <div className="p-8 text-center">
+              <h2 className="text-2xl font-semibold mb-4">Welcome to Your Education Hub</h2>
+              <p className="text-gray-600 mb-6">
+                Explore our premium educational content customized for your health and nutrition goals.
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="mb-16">
           <h2 className="text-2xl font-bold mb-6">Featured Topics</h2>
