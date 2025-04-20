@@ -4,11 +4,21 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 
-export const Header = () => {
+interface HeaderProps {
+  isLoggedIn: boolean;
+}
+
+export const Header = ({ isLoggedIn }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleSignOut = () => {
+    localStorage.removeItem("nutribite_user");
+    localStorage.removeItem("user_profile");
+    window.location.href = "/";
   };
 
   return (
@@ -29,7 +39,7 @@ export const Header = () => {
               Home
             </Link>
             <Link to="/meal-planner" className="text-gray-700 hover:text-nutribite-green transition-colors">
-              Meal Planner
+              {isLoggedIn ? "Dashboard" : "Meal Planner"}
             </Link>
             <Link to="/chatbot" className="text-gray-700 hover:text-nutribite-green transition-colors">
               Nutrition Assistant
@@ -43,16 +53,28 @@ export const Header = () => {
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
-            <Link to="/auth">
-              <Button variant="outline" className="border-nutribite-green text-nutribite-green hover:bg-nutribite-green hover:text-white">
-                Login
+            {isLoggedIn ? (
+              <Button 
+                onClick={handleSignOut}
+                variant="outline" 
+                className="border-nutribite-green text-nutribite-green hover:bg-nutribite-green hover:text-white"
+              >
+                Sign Out
               </Button>
-            </Link>
-            <Link to="/auth?signup=true">
-              <Button className="bg-nutribite-green hover:bg-nutribite-green-dark">
-                Sign Up
-              </Button>
-            </Link>
+            ) : (
+              <>
+                <Link to="/auth">
+                  <Button variant="outline" className="border-nutribite-green text-nutribite-green hover:bg-nutribite-green hover:text-white">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/auth?signup=true">
+                  <Button className="bg-nutribite-green hover:bg-nutribite-green-dark">
+                    Sign Up
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -81,7 +103,7 @@ export const Header = () => {
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-nutribite-green hover:bg-gray-50"
               onClick={() => setIsMenuOpen(false)}
             >
-              Meal Planner
+              {isLoggedIn ? "Dashboard" : "Meal Planner"}
             </Link>
             <Link 
               to="/chatbot" 
@@ -107,24 +129,40 @@ export const Header = () => {
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
             <div className="flex items-center px-5">
-              <div className="flex-shrink-0">
-                <Link 
-                  to="/auth" 
-                  className="w-full block text-center px-4 py-2 font-medium text-nutribite-green border border-nutribite-green rounded-md hover:bg-nutribite-green hover:text-white"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Login
-                </Link>
-              </div>
-              <div className="ml-3 w-full">
-                <Link 
-                  to="/auth?signup=true" 
-                  className="w-full block text-center px-4 py-2 font-medium text-white bg-nutribite-green rounded-md hover:bg-nutribite-green-dark"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Sign Up
-                </Link>
-              </div>
+              {isLoggedIn ? (
+                <div className="flex-shrink-0 w-full">
+                  <button 
+                    onClick={() => {
+                      handleSignOut();
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full block text-center px-4 py-2 font-medium text-nutribite-green border border-nutribite-green rounded-md hover:bg-nutribite-green hover:text-white"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="flex-shrink-0">
+                    <Link 
+                      to="/auth" 
+                      className="w-full block text-center px-4 py-2 font-medium text-nutribite-green border border-nutribite-green rounded-md hover:bg-nutribite-green hover:text-white"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Login
+                    </Link>
+                  </div>
+                  <div className="ml-3 w-full">
+                    <Link 
+                      to="/auth?signup=true" 
+                      className="w-full block text-center px-4 py-2 font-medium text-white bg-nutribite-green rounded-md hover:bg-nutribite-green-dark"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
