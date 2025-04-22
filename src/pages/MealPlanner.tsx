@@ -1,14 +1,18 @@
-
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UserDashboard } from "@/components/dashboard/UserDashboard";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { ChartBar } from "lucide-react";
+import { ChartBar, ExternalLink } from "lucide-react";
 
 const MealPlanner = () => {
   const { isLoggedIn } = useAuth();
+  const streamlitAppUrl = "https://msachin11-innovnutri-bite-backendapp-mcpxdf.streamlit.app/";
+
+  const openStreamlitApp = () => {
+    window.open(streamlitAppUrl, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <PageLayout>
@@ -17,12 +21,13 @@ const MealPlanner = () => {
           <>
             <UserDashboard />
             <div className="mt-8 text-center">
-              <Link to="/advanced-planner">
-                <Button className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2">
-                  <ChartBar className="h-4 w-4" />
-                  Advanced Nutrition Planner
-                </Button>
-              </Link>
+              <Button 
+                className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
+                onClick={openStreamlitApp}
+              >
+                <ExternalLink className="h-4 w-4" />
+                Open Nutrition Planner App
+              </Button>
             </div>
           </>
         ) : (
@@ -34,27 +39,38 @@ const MealPlanner = () => {
                 and health goals. Get nutritional insights and recommendations for balanced eating.
               </p>
               <div className="mt-6">
-                <Link to="/advanced-planner">
-                  <Button className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2">
-                    <ChartBar className="h-4 w-4" />
-                    Try Advanced Nutrition Planner
-                  </Button>
-                </Link>
+                <Button 
+                  className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
+                  onClick={openStreamlitApp}
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Try Nutrition Planner App
+                </Button>
               </div>
             </div>
 
             <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
               <div className="p-8 text-center">
-                <h2 className="text-2xl font-semibold mb-4">Sign in to access the Meal Planner</h2>
+                <h2 className="text-2xl font-semibold mb-4">Sign in to save your meal plans</h2>
                 <p className="text-gray-600 mb-6">
                   Your personalized meal planning experience is just one click away. 
-                  Sign in to start creating customized meal plans that match your nutritional needs.
+                  Sign in to start creating and saving customized meal plans that match your nutritional needs.
                 </p>
-                <Link to="/auth">
-                  <Button className="bg-nutribite-green hover:bg-nutribite-green-dark px-6 py-2">
-                    Sign in to Continue
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <Link to="/auth">
+                    <Button className="bg-nutribite-green hover:bg-nutribite-green-dark px-6 py-2">
+                      Sign in to Continue
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    className="flex items-center gap-2"
+                    onClick={openStreamlitApp}
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Try App Without Signing In
                   </Button>
-                </Link>
+                </div>
               </div>
             </div>
 
@@ -100,6 +116,31 @@ const MealPlanner = () => {
             </div>
           </>
         )}
+
+        {/* Streamlit App Embed Section */}
+        <div className="mt-16 border rounded-xl overflow-hidden shadow-lg">
+          <div className="bg-muted py-3 px-4 border-b border-border flex justify-between items-center">
+            <h2 className="text-lg font-semibold">NutriBite Planner App</h2>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={openStreamlitApp}
+              className="text-muted-foreground flex items-center gap-1"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Open in new tab
+            </Button>
+          </div>
+          <div className="w-full h-[600px]">
+            <iframe
+              src={streamlitAppUrl}
+              title="NutriBite Planner App"
+              className="w-full h-full border-0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
       </div>
     </PageLayout>
   );
