@@ -9,7 +9,8 @@ import {
   Send,
   MessageCircle,
   RefreshCcw,
-  Zap
+  Zap,
+  HelpCircle
 } from "lucide-react";
 
 const sampleResponses = [
@@ -137,6 +138,21 @@ const Chatbot = () => {
     handleSendMessage();
   };
 
+  const showQuickQuestions = () => {
+    const helpMessage: Message = {
+      text: "Here are some questions you can ask:\n\n" +
+        "• What are some healthy breakfast options?\n" +
+        "• How much protein should I eat daily?\n" +
+        "• What are the symptoms of vitamin D deficiency?\n" +
+        "• Which foods are high in iron?\n" +
+        "• How can I reduce sugar in my diet?",
+      sender: "bot",
+      timestamp: new Date()
+    };
+    setMessages(prev => [...prev, helpMessage]);
+    scrollToBottom();
+  };
+
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
@@ -156,10 +172,21 @@ const Chatbot = () => {
             <div className="md:col-span-4 order-2 md:order-1">
               <Card>
                 <CardContent className="pt-6">
-                  <h3 className="font-medium mb-4 flex items-center">
-                    <Zap className="h-5 w-5 mr-2 text-green-600" />
-                    Quick Questions
-                  </h3>
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="font-medium flex items-center">
+                      <Zap className="h-5 w-5 mr-2 text-green-600" />
+                      Quick Questions
+                    </h3>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={showQuickQuestions}
+                      className="flex items-center gap-2"
+                    >
+                      <HelpCircle className="h-4 w-4" />
+                      Help!
+                    </Button>
+                  </div>
                   <div className="space-y-2">
                     {quickQuestions.map((question, index) => (
                       <Button
