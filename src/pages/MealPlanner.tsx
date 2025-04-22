@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { UserDashboard } from "@/components/dashboard/UserDashboard";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { ChartBar } from "lucide-react";
 
 const MealPlanner = () => {
   const { isLoggedIn } = useAuth();
@@ -13,7 +14,17 @@ const MealPlanner = () => {
     <PageLayout>
       <div className="container mx-auto px-4 md:px-6 py-16">
         {isLoggedIn ? (
-          <UserDashboard />
+          <>
+            <UserDashboard />
+            <div className="mt-8 text-center">
+              <Link to="/advanced-planner">
+                <Button className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2">
+                  <ChartBar className="h-4 w-4" />
+                  Advanced Nutrition Planner
+                </Button>
+              </Link>
+            </div>
+          </>
         ) : (
           <>
             <div className="text-center mb-12">
@@ -22,6 +33,14 @@ const MealPlanner = () => {
                 Create customized meal plans based on your preferences, dietary restrictions, 
                 and health goals. Get nutritional insights and recommendations for balanced eating.
               </p>
+              <div className="mt-6">
+                <Link to="/advanced-planner">
+                  <Button className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2">
+                    <ChartBar className="h-4 w-4" />
+                    Try Advanced Nutrition Planner
+                  </Button>
+                </Link>
+              </div>
             </div>
 
             <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">

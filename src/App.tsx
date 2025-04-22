@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +8,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import MealPlanner from "./pages/MealPlanner";
+import AdvancedPlanner from "./pages/AdvancedPlanner";
 import Chatbot from "./pages/Chatbot";
 import Shop from "./pages/Shop";
 import Education from "./pages/Education";
@@ -28,6 +30,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/meal-planner" element={<MealPlanner />} />
+            <Route path="/advanced-planner" element={<AdvancedPlanner />} />
             <Route path="/chatbot" element={<Chatbot />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/education" element={<Education />} />
