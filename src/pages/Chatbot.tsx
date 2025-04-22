@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,27 +12,12 @@ import {
   HelpCircle
 } from "lucide-react";
 
-const sampleResponses = [
-  {
-    question: "What are some healthy breakfast options?",
-    answer: "Sure! Healthy breakfast choices include:\n\n1. Oats topped with banana and flax seeds\n2. Scrambled tofu or eggs with spinach\n3. Smoothie bowls with berries, Greek yogurt, and almonds\n4. Whole grain wraps with hummus and veggies\n5. Quinoa porridge with dates and nuts"
-  },
-  {
-    question: "How much protein should I eat daily?",
-    answer: "Protein needs vary by activity level:\n\n- Sedentary: 0.8g/kg\n- Active: 1.2–2.0g/kg\n- Muscle building: 1.6–2.2g/kg\n\nIf you're 60kg and active, aim for 72–120g protein/day."
-  },
-  {
-    question: "What are the symptoms of vitamin D deficiency?",
-    answer: "Vitamin D deficiency symptoms:\n\n- Fatigue\n- Bone or joint pain\n- Mood changes\n- Muscle weakness\n\nGet sunlight and eat fish, eggs, and fortified foods!"
-  },
-  {
-    question: "Which foods are high in iron?",
-    answer: "Iron-rich foods:\n\n- Red meat, liver\n- Spinach, lentils\n- Chickpeas, pumpkin seeds\n- Fortified cereals\n\nPair with vitamin C to absorb better!"
-  },
-  {
-    question: "How can I reduce sugar in my diet?",
-    answer: "Cut sugar by:\n\n- Avoiding sugary drinks\n- Using fruits to sweeten\n- Reading food labels\n- Choosing whole foods\n- Limiting desserts"
-  }
+const quickQuestions = [
+  "What are some healthy breakfast options?",
+  "How much protein should I eat daily?",
+  "What are the symptoms of vitamin D deficiency?",
+  "Which foods are high in iron?",
+  "How can I reduce sugar in my diet?"
 ];
 
 type Message = {
@@ -43,29 +27,18 @@ type Message = {
 };
 
 const Chatbot = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      text: "👋 Hello! I'm NutriBite, your AI nutrition assistant. Ask me anything about healthy eating, nutrients, or meal ideas!",
-      sender: "bot",
-      timestamp: new Date()
-    },
-    {
-      text: "💡 Tip: Try asking things like 'What should I eat for breakfast?' or 'How much protein do I need?'",
-      sender: "bot",
-      timestamp: new Date()
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([{
+    text: "👋 Hello! I'm NutriBite, your AI nutrition assistant. Ask me anything about healthy eating, nutrients, or meal ideas!",
+    sender: "bot",
+    timestamp: new Date()
+  }, {
+    text: "💡 Tip: Try asking things like 'What should I eat for breakfast?' or 'How much protein do I need?'",
+    sender: "bot",
+    timestamp: new Date()
+  }]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
-
-  const quickQuestions = [
-    "What are some healthy breakfast options?",
-    "How much protein should I eat daily?",
-    "What are the symptoms of vitamin D deficiency?",
-    "Which foods are high in iron?",
-    "How can I reduce sugar in my diet?"
-  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -75,77 +48,70 @@ const Chatbot = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = (e?: React.FormEvent) => {
+  const handleSend = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    const input = inputValue.trim();
+    if (!input) return;
 
-    const trimmedInput = inputValue.trim();
-    if (trimmedInput) {
-      const userMessage: Message = {
-        text: trimmedInput,
-        sender: "user",
+    const userMessage: Message = {
+      text: input,
+      sender: "user",
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue("");
+    setIsTyping(true);
+
+    setTimeout(() => {
+      const userText = userMessage.text.toLowerCase();
+      let botReply = "";
+
+      if (["hi", "hello", "hey"].includes(userText)) {
+        botReply = "Hey there! 👋 Need help with nutrition tips?";
+      } else if (["bye", "goodbye", "see you"].includes(userText)) {
+        botReply = "See you later! Stay healthy 🌱";
+      } else if (["thanks", "thank you"].includes(userText)) {
+        botReply = "You're welcome! 😊";
+      } else if (["good morning", "morning"].includes(userText)) {
+        botReply = "Good morning! Ready to fuel your day? ☀️";
+      } else {
+        botReply = `You asked: "${userMessage.text}"\nTip: Eat whole foods and hydrate! 💧`;
+      }
+
+      const botMessage: Message = {
+        text: botReply,
+        sender: "bot",
         timestamp: new Date()
       };
 
-      setMessages((prev) => [...prev, userMessage]);
-      setInputValue("");
-      setIsTyping(true);
-
-      setTimeout(() => {
-        let botReply = "";
-
-        // Greeting detection
-        if (/^(hi|hello|hey)\b/i.test(trimmedInput)) {
-          botReply = "Hey there! 😊 How can I help you with your nutrition today?";
-        } else {
-          const matchedResponse = sampleResponses.find((resp) =>
-            trimmedInput.toLowerCase().includes(resp.question.toLowerCase())
-          );
-
-          botReply = matchedResponse
-            ? matchedResponse.answer
-            : "Hmm... I don't have a specific answer for that right now. Try rephrasing or check with a dietitian!";
-        }
-
-        const botMessage: Message = {
-          text: botReply,
-          sender: "bot",
-          timestamp: new Date()
-        };
-
-        setMessages((prev) => [...prev, botMessage]);
-        setIsTyping(false);
-      }, 1500);
-    }
+      setMessages(prev => [...prev, botMessage]);
+      setIsTyping(false);
+      scrollToBottom();
+    }, 600);
   };
 
   const handleReset = () => {
-    setMessages([
-      {
-        text: "👋 Hello! I'm NutriBite, your AI nutrition assistant. Ask me anything about healthy eating, nutrients, or meal ideas!",
-        sender: "bot",
-        timestamp: new Date()
-      },
-      {
-        text: "💡 Tip: Try asking things like 'What should I eat for breakfast?' or 'How much protein do I need?'",
-        sender: "bot",
-        timestamp: new Date()
-      }
-    ]);
+    setMessages([{
+      text: "👋 Hello! I'm NutriBite, your AI nutrition assistant. Ask me anything about healthy eating, nutrients, or meal ideas!",
+      sender: "bot",
+      timestamp: new Date()
+    }, {
+      text: "💡 Tip: Try asking things like 'What should I eat for breakfast?' or 'How much protein do I need?'",
+      sender: "bot",
+      timestamp: new Date()
+    }]);
   };
 
   const handleQuickQuestion = (question: string) => {
     setInputValue(question);
-    handleSendMessage();
+    handleSend();
   };
 
   const showQuickQuestions = () => {
     const helpMessage: Message = {
       text: "Here are some questions you can ask:\n\n" +
-        "• What are some healthy breakfast options?\n" +
-        "• How much protein should I eat daily?\n" +
-        "• What are the symptoms of vitamin D deficiency?\n" +
-        "• Which foods are high in iron?\n" +
-        "• How can I reduce sugar in my diet?",
+        quickQuestions.map(q => `• ${q}`).join("\n"),
       sender: "bot",
       timestamp: new Date()
     };
@@ -226,9 +192,7 @@ const Chatbot = () => {
                     {messages.map((message, index) => (
                       <div
                         key={index}
-                        className={`flex ${
-                          message.sender === "user" ? "justify-end" : "justify-start"
-                        }`}
+                        className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                       >
                         <div
                           className={`max-w-[80%] rounded-lg p-3 ${
@@ -268,7 +232,7 @@ const Chatbot = () => {
                 </ScrollArea>
 
                 <div className="border-t border-border p-3">
-                  <form onSubmit={handleSendMessage} className="flex space-x-2">
+                  <form onSubmit={handleSend} className="flex space-x-2">
                     <Textarea
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
@@ -277,7 +241,7 @@ const Chatbot = () => {
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                           e.preventDefault();
-                          handleSendMessage();
+                          handleSend();
                         }
                       }}
                     />
@@ -289,6 +253,7 @@ const Chatbot = () => {
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </PageLayout>
