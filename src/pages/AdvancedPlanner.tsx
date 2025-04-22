@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,7 +10,7 @@ import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useNavigate } from "react-router-dom";
-import { Calculator, ChartBar, Utensils, Activity, Heart, Plus, FileText, Zap } from "lucide-react";
+import { Calculator, ChartBar, Utensils, Activity, Heart, Plus, FileText, Zap, RefreshCcw } from "lucide-react";
 import { toast } from "sonner";
 
 type NutritionProfile = {
