@@ -1,11 +1,9 @@
 
-import { useState, useEffect } from "react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UserDashboard } from "@/components/dashboard/UserDashboard";
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 
 const MealPlanner = () => {

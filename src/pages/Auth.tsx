@@ -1,4 +1,3 @@
-
 import { useState, useEffect, FormEvent } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -7,11 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
 const Auth = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { isLoggedIn, login, signup } = useAuth();
   const [activeTab, setActiveTab] = useState<string>("login");
   
   // Login form state
@@ -28,12 +29,17 @@ const Auth = () => {
   const [signupLoading, setSignupLoading] = useState(false);
 
   useEffect(() => {
+    // Redirect to home if already logged in
+    if (isLoggedIn) {
+      navigate("/");
+    }
+
     // Check if there's a signup parameter in the URL
     const params = new URLSearchParams(location.search);
     if (params.get("signup") === "true") {
       setActiveTab("signup");
     }
-  }, [location]);
+  }, [location, isLoggedIn, navigate]);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -44,24 +50,15 @@ const Auth = () => {
     
     // Validate form
     if (!loginEmail || !loginPassword) {
-      toast.error("Please fill in all fields");
       return;
     }
     
     try {
       setLoginLoading(true);
-      
-      // This is a simulation of an API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, we'll accept any email/password combination
-      toast.success("Login successful! Welcome back.");
-      
-      // Redirect to home page after successful login
-      navigate("/");
-    } catch (error) {
-      toast.error("Login failed. Please try again.");
-      console.error("Login error:", error);
+      const success = await login(loginEmail, loginPassword);
+      if (success) {
+        navigate("/");
+      }
     } finally {
       setLoginLoading(false);
     }
@@ -72,29 +69,19 @@ const Auth = () => {
     
     // Validate form
     if (!firstName || !lastName || !signupEmail || !signupPassword || !confirmPassword) {
-      toast.error("Please fill in all fields");
       return;
     }
     
     if (signupPassword !== confirmPassword) {
-      toast.error("Passwords do not match");
       return;
     }
     
     try {
       setSignupLoading(true);
-      
-      // This is a simulation of an API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, we'll always succeed
-      toast.success("Account created successfully! Welcome to NutriBite.");
-      
-      // Redirect to home page after successful signup
-      navigate("/");
-    } catch (error) {
-      toast.error("Signup failed. Please try again.");
-      console.error("Signup error:", error);
+      const success = await signup(firstName, lastName, signupEmail, signupPassword);
+      if (success) {
+        navigate("/");
+      }
     } finally {
       setSignupLoading(false);
     }

@@ -1,24 +1,22 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
-interface HeaderProps {
-  isLoggedIn: boolean;
-}
-
-export const Header = ({ isLoggedIn }: HeaderProps) => {
+export const Header = () => {
+  const { isLoggedIn, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem("nutribite_user");
-    localStorage.removeItem("user_profile");
-    window.location.href = "/";
+    logout();
+    navigate("/");
   };
 
   return (
