@@ -1,4 +1,3 @@
-
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,9 +56,11 @@ const Education = () => {
                   Learn about the different forms of malnutrition, their impact on health,
                   and effective strategies for prevention and treatment.
                 </p>
-                <Button variant="outline" className="w-full border-nutribite-green text-nutribite-green hover:bg-nutribite-green-light/10">
-                  Read More
-                </Button>
+                <Link to="/education/malnutrition">
+                  <Button variant="outline" className="w-full border-nutribite-green text-nutribite-green hover:bg-nutribite-green-light/10">
+                    Read More
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
             
@@ -73,9 +74,11 @@ const Education = () => {
                   Discover the key components of a balanced diet, understand macro and micronutrients,
                   and learn how to create meals that support optimal health.
                 </p>
-                <Button variant="outline" className="w-full border-nutribite-green text-nutribite-green hover:bg-nutribite-green-light/10">
-                  Read More
-                </Button>
+                <Link to="/education/balanced-diet">
+                  <Button variant="outline" className="w-full border-nutribite-green text-nutribite-green hover:bg-nutribite-green-light/10">
+                    Read More
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
             
@@ -89,9 +92,11 @@ const Education = () => {
                   Separate fact from fiction with our evidence-based analysis of common nutrition myths
                   and misconceptions that may be affecting your dietary choices.
                 </p>
-                <Button variant="outline" className="w-full border-nutribite-green text-nutribite-green hover:bg-nutribite-green-light/10">
-                  Read More
-                </Button>
+                <Link to="/education/nutrition-myths">
+                  <Button variant="outline" className="w-full border-nutribite-green text-nutribite-green hover:bg-nutribite-green-light/10">
+                    Read More
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>

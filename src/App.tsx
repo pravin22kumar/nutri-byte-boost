@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,6 +11,9 @@ import Chatbot from "./pages/Chatbot";
 import Shop from "./pages/Shop";
 import Education from "./pages/Education";
 import NotFound from "./pages/NotFound";
+import MalnutritionPage from "./pages/education/Malnutrition";
+import BalancedDietPage from "./pages/education/BalancedDiet";
+import NutritionMythsPage from "./pages/education/NutritionMyths";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +31,9 @@ const App = () => (
             <Route path="/chatbot" element={<Chatbot />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/education" element={<Education />} />
+            <Route path="/education/malnutrition" element={<MalnutritionPage />} />
+            <Route path="/education/balanced-diet" element={<BalancedDietPage />} />
+            <Route path="/education/nutrition-myths" element={<NutritionMythsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
